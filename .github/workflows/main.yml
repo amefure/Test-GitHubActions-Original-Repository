@@ -23,12 +23,12 @@ jobs:
           git clone --bare https://github.com/amefure/Test-GitHubActions-Original-Repository.git repo-a
           cd repo-a
 
-          echo "すべてのリモートブランチを表示"
-          git branch -r
+          echo "すべてのブランチを表示"
+          git branch -a
 
           # `feature/release*` にマッチするブランチのみ取得
           echo "'feature/release*'にマッチするブランチを全て取得"
-          BRANCHES=$(git branch -r | grep -E 'feature/release.*')
+          BRANCHES=$(git branch -a | grep -E 'feature/release.*')
 
           # 取得したブランチ名を出力
           echo "見つかったブランチ: $BRANCHES"
