@@ -1,0 +1,43 @@
+name: Sync Specific Branches to Repository B
+
+on:
+  push:
+    branches:
+      - "feature/release*"  # `feature/release*` に一致するブランチの変更を検知
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git をセットアップ
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: リポジトリAのブランチ情報を取得
+        run: |
+          set -x  # デバッグ用（実行するコマンドを出力）
+
+          # リポジトリAをクローン
+          git clone --bare https://github.com/amefure/Test-GitHubActions-Original-Repository.git repo-a
+          cd repo-a
+
+          echo "すべてのブランチを表示"
+          git branch -a
+
+          # `feature/release*` にマッチするブランチのみ取得
+          echo "'feature/release*'にマッチするブランチを全て取得"
+          BRANCHES=$(git branch -a | grep -E 'feature/release.*')
+
+          # 取得したブランチ名を出力
+          echo "見つかったブランチ: $BRANCHES"
+
+          # リモートリポジトリBを追加
+          git remote add target https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/amefure/Test-GitHubActions-Sync-Repository.git
+
+          # 各ブランチを個別にプッシュ
+          for BRANCH in $BRANCHES; do
+            git fetch origin $BRANCH
+            git push target $BRANCH
+          done
