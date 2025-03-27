@@ -31,7 +31,7 @@ jobs:
 
           # `feature/release*` にマッチするブランチのみ取得
           echo "🔍 Fetching branches matching 'feature/release*'..."
-          BRANCHES=$(git branch -r | grep -E 'origin/feature/release.*' | sed 's/origin\///')
+          BRANCHES=$(git branch -a | grep -E 'origin/feature/release.*' | sed 's/origin\///')
 
           # 取得したブランチ名を出力
           echo "✅ Found branches: $BRANCHES"
