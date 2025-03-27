@@ -9,10 +9,10 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: リポジトリ A をチェックアウト
+      - name: リポジトリAをチェックアウト
         uses: actions/checkout@v4
 
-      - name: リポジトリ B をクローン
+      - name: リポジトリAをクローンしてリポジトリBへ同期する
         run: |
           git clone --bare https://github.com/amefure/Test-GitHubActions-Original-Repository.git repo-b
           cd repo-b
