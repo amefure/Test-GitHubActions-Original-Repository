@@ -23,7 +23,7 @@ jobs:
           git clone --bare https://github.com/amefure/Test-GitHubActions-Original-Repository.git repo-a
           cd repo-a
 
-          echo "すべてのブランチ(ローカル)を表示"
+          echo "すべてのリモートブランチを表示"
           git branch -r
 
           # `feature/release*` にマッチするブランチのみ取得
