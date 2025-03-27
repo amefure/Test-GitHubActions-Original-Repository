@@ -1,0 +1,21 @@
+name: Sync to Repository B
+
+on:
+  push:
+    branches:
+      - main  # main ブランチの変更を検知
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリAをクローンしてリポジトリBへ同期する
+        run: |
+          # リポジトリA（Test-GitHubActions-Original-Repository）を bare モードでクローン
+          git clone --bare https://github.com/amefure/Test-GitHubActions-Original-Repository.git repo-b
+          # クローンしたリポジトリに移動
+          cd repo-b
+
+          # `--mirror` を使って、リポジトリAの全てのブランチ・タグ・リモート設定を
+          # リポジトリB（Test-GitHubActions-Sync-Repository）に完全同期
+          git push --mirror https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/amefure/Test-GitHubActions-Sync-Repository.git
