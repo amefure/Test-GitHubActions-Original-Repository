@@ -26,6 +26,9 @@ jobs:
           # どのリモートが登録されているか確認
           git remote -v  
 
+          echo "🔍 すべてのブランチ（ローカル & リモート）:"
+          git branch -a
+
           # `feature/release*` にマッチするブランチのみ取得
           echo "🔍 Fetching branches matching 'feature/release*'..."
           BRANCHES=$(git branch -r | grep -E 'origin/feature/release.*' | sed 's/origin\///')
