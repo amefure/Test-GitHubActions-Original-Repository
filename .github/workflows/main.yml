@@ -19,42 +19,25 @@ jobs:
         run: |
           set -x  # デバッグ用（実行するコマンドを出力）
 
-          # `origin` にリポジトリAを追加
+          # リポジトリAをクローン
           git clone --bare https://github.com/amefure/Test-GitHubActions-Original-Repository.git repo-a
           cd repo-a
 
-          # どのリモートが登録されているか確認
-          git remote -v  
-
-          echo "🔍 すべてのブランチ（ローカル & リモート）:"
-          git branch -a
+          echo "すべてのブランチ(ローカル)を表示"
+          git branch -r
 
           # `feature/release*` にマッチするブランチのみ取得
-          echo "🔍 Fetching branches matching 'feature/release*'..."
-          BRANCHES=$(git branch -a | grep -E 'feature/release.*')
+          echo "'feature/release*'にマッチするブランチを全て取得"
+          BRANCHES=$(git branch -r | grep -E 'feature/release.*')
 
           # 取得したブランチ名を出力
-          echo "✅ Found branches: $BRANCHES"
+          echo "見つかったブランチ: $BRANCHES"
 
           # リモートリポジトリBを追加
           git remote add target https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/amefure/Test-GitHubActions-Sync-Repository.git
-          git remote -v  # 追加後のリモートリストを確認
 
           # 各ブランチを個別にプッシュ
           for BRANCH in $BRANCHES; do
-            echo "🚀 Processing branch: $BRANCH"
-
-            # ブランチが空でないかチェック
-            if [ -z "$BRANCH" ]; then
-              echo "⚠️ No matching branches found, skipping..."
-              continue
-            fi
-
-            # `git fetch` のログを出力
-            echo "🔄 Fetching branch $BRANCH from origin..."
-            git fetch --verbose origin $BRANCH
-
-            # `git push` のログを出力
-            echo "📤 Pushing branch $BRANCH to target..."
-            git push --verbose target $BRANCH
+            git fetch origin $BRANCH
+            git push target $BRANCH
           done
